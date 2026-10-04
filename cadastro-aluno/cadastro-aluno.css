@@ -1,29 +1,79 @@
-h2 {
-    margin-bottom: 16px;
-}
+/* RF09 - RESPONSIVO - AVA-EDUCA+ */
 
-form {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+/* Reset base que você já tem */
+.form-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 15px; 
 }
+.full { grid-column: 1 / -1; }
 
-form h3 {
-    grid-column: 1 / -1;
-    margin-top: 8px;
-    color: #2c3e94;
+input, select { 
+  width: 100%; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  box-sizing: border-box;
+  font-size: 14px;
 }
+label { font-size: 13px; font-weight: bold; margin-bottom: 4px; display: block; }
 
-form .btn,
-#feedback {
-    grid-column: 1 / -1;
-}
+/* Tabela responsiva */
+#lista-container { overflow-x: auto; }
+#lista-container table { min-width: 500px; }
 
+/* =========== MODO CELULAR - RF09 =========== */
 @media (max-width: 768px) {
-    form {
-        grid-template-columns: 1fr;
-    }
+  
+  /* 1. Layout vira coluna */
+  body > div {
+    flex-direction: column !important;
+  }
+
+  /* 2. Sidebar vira menu horizontal no topo */
+  nav {
+    width: 100% !important;
+    min-height: auto !important;
+    display: flex;
+    overflow-x: auto;
+    padding: 10px !important;
+    gap: 10px;
+    border-bottom: 2px solid #1e3a8a;
+  }
+  nav p {
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  /* 3. Formulário vira 1 coluna */
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .full {
+    grid-column: 1 !important;
+  }
+
+  /* 4. Main sem margem lateral */
+  main {
+    padding: 15px !important;
+  }
+
+  /* 5. Header menor */
+  header {
+    font-size: 14px;
+    padding: 10px !important;
+  }
+
+  /* 6. Botão maior pra dedo */
+  button[type="submit"] {
+    padding: 15px !important;
+    font-size: 16px;
+  }
+}
+
+/* Extra: Celular bem pequeno */
+@media (max-width: 480px) {
+  h2 { font-size: 18px; }
+  h3 { font-size: 16px; }
+  input, select { font-size: 16px; } /* evita zoom do iPhone */
 }

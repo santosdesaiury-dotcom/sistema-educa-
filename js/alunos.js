@@ -1,16 +1,31 @@
-import { alunos } from "../dados/listagem-alunos.js";
+import { alunos as alunosIniciais } from "../dados/listagem-alunos.js";
+
+function getLista() {
+  const salvo = localStorage.getItem('alunos');
+  if (salvo) {
+    return JSON.parse(salvo);
+  }
+  return [...alunosIniciais]; 
+}
 
 export function cadastrarAluno(aluno) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const existe = alunos.find(a => a.cpf === aluno.cpf);
+      const listaAtual = getLista();
+      const existe = listaAtual.find(a => a.cpf === aluno.cpf);
       if (existe) {
         reject("CPF já cadastrado");
         return;
       }
-      alunos.push(aluno);
-      console.log("Lista atual:", alunos);
+      listaAtual.push(aluno);
+      localStorage.setItem('alunos', JSON.stringify(listaAtual)); 
+      console.log("Lista atual:", listaAtual.length);
       resolve("Aluno cadastrado com sucesso!");
     }, 500);
   });
+}
+
+// - Função para listar todos os alunos
+export function listarTodosAlunos() {
+  return getLista();
 }

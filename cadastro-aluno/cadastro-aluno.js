@@ -1,110 +1,90 @@
+import { listarTodosAlunos } from "../js/alunos.js";
 
-import { Aluno } from "../js/Aluno.js"; 
-import { cadastrarAluno } from "../js/alunos.js"; 
+const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+if (!usuarioLogado) window.location.href = "../login/login.html";
 
+const form = document.getElementById("formAluno");
+const feedback = document.getElementById("feedback");
 
-const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-if (!usuario) {
-  window.location.href = '../login/login.html';
+function renderLista() {
+  const lista = listarTodosAlunos();
+  const tbody = document.getElementById("listaAlunos");
+  const qtd = document.getElementById("qtdLista");
+  if(qtd) qtd.innerText = lista.length;
+  if(!tbody) return;
+  if(lista.length === 0){
+    tbody.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center;">Nenhum aluno ainda</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map(a => `
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">${a.nomeCompleto || a.nome}</td>
+      <td style="padding:8px; border:1px solid #ddd;">${a.cpf}</td>
+      <td style="padding:8px; border:1px solid #ddd;">${a.email}</td>
+      <td style="padding:8px; border:1px solid #ddd;">${a.cidade}</td>
+    </tr>`).join('');
 }
+renderLista();
 
-document.getElementById('userName').textContent = usuario.nome;
-document.getElementById('btnSair').addEventListener('click', () => {
-  sessionStorage.removeItem('usuarioLogado');
-  window.location.href = '../login/login.html';
-});
-
-
-const cepInput = document.getElementById('cep');
-cepInput.addEventListener('blur', async () => {
-  const cep = cepInput.value.replace(/\D/g, '');
-  if (cep.length !== 8) return;
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const data = await res.json();
-    if (!data.erro) {
-      document.getElementById('logradouro').value = data.logradouro || '';
-      document.getElementById('bairro').value = data.bairro || '';
-      document.getElementById('cidade').value = data.localidade || '';
-      document.getElementById('estado').value = data.uf || '';
-    }
-  } catch (e) {
-    console.error("Erro ViaCEP", e);
+document.getElementById("cep")?.addEventListener("blur", async (e) => {
+  const cep = e.target.value.replace(/\D/g,"");
+  if(cep.length===8){
+    try{
+      const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const d = await r.json();
+      if(!d.erro){
+        document.getElementById("logradouro").value = d.logradouro;
+        document.getElementById("bairro").value = d.bairro;
+        document.getElementById("cidade").value = d.localidade;
+        document.getElementById("estado").value = d.uf;
+      }
+    }catch{}
   }
 });
 
-document.getElementById('formAluno').addEventListener('submit', (e) => {
+form?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const feedback = document.getElementById('feedback');
+  console.log("Clicou em salvar - JS carregou!");
 
-  const nome = document.getElementById('nome').value.trim();
-  const genero = document.getElementById('genero').value;
-  const dataNasc = document.getElementById('dataNasc').value.trim();
-  const cpf = document.getElementById('cpf').value.trim();
-  const telefone = document.getElementById('telefone').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const cep = document.getElementById('cep').value.trim();
-  const cidade = document.getElementById('cidade').value.trim();
-  const estado = document.getElementById('estado').value.trim();
-  const logradouro = document.getElementById('logradouro').value.trim();
-  const numero = document.getElementById('numero').value.trim();
-  const complemento = document.getElementById('complemento').value.trim();
-  const bairro = document.getElementById('bairro').value.trim();
+  const aluno = {
+    nomeCompleto: document.getElementById("nomeCompleto").value.trim(),
+    genero: document.getElementById("genero").value,
+    dataNascimento: document.getElementById("dataNascimento").value,
+    cpf: document.getElementById("cpf").value.replace(/\D/g,""),
+    telefone: document.getElementById("telefone").value,
+    email: document.getElementById("email").value,
+    cep: document.getElementById("cep").value,
+    cidade: document.getElementById("cidade").value,
+    estado: document.getElementById("estado").value,
+    logradouro: document.getElementById("logradouro").value,
+    numero: document.getElementById("numero").value,
+    complemento: document.getElementById("complemento").value,
+    bairro: document.getElementById("bairro").value,
+    id: Date.now()
+  };
 
-
-  if (nome.length < 4 || nome.length > 80) {
-    feedback.textContent = "Nome deve ter de 4 a 80 caracteres";
-    feedback.className = "feedback error"; return;
+  if(aluno.nomeCompleto.length < 4 || aluno.nomeCompleto.length > 80){
+    feedback.textContent = "Nome deve ter 4 a 80 caracteres";
+    feedback.className = "feedback error";
+    return;
   }
-  if (!genero) {
-    feedback.textContent = "Gênero é obrigatório";
-    feedback.className = "feedback error"; return;
-  }
-  if (!moment(dataNasc, "DD/MM/YYYY", true).isValid()) {
-    feedback.textContent = "Data inválida. Use DD/MM/YYYY";
-    feedback.className = "feedback error"; return;
-  }
-  const dt = moment(dataNasc, "DD/MM/YYYY");
-  if (dt.isBefore(moment("01/01/1900", "DD/MM/YYYY")) || dt.isAfter(moment())) {
-    feedback.textContent = "Data deve ser maior que 01/01/1900 e menor que hoje";
-    feedback.className = "feedback error"; return;
-  }
-  if (!/^\d+$/.test(cpf)) {
-    feedback.textContent = "CPF deve conter apenas números";
-    feedback.className = "feedback error"; return;
-  }
-  if (!/^\d+$/.test(telefone)) {
-    feedback.textContent = "Telefone deve conter apenas números";
-    feedback.className = "feedback error"; return;
-  }
-  if (!/^\d+$/.test(cep)) {
-    feedback.textContent = "CEP deve conter apenas números";
-    feedback.className = "feedback error"; return;
-  }
-  if (!/^\d+$/.test(numero)) {
-    feedback.textContent = "Número deve conter apenas números";
-    feedback.className = "feedback error"; return;
-  }
-  if (!cidade || !estado || !logradouro || !bairro || !email) {
-    feedback.textContent = "Preencha todos os campos obrigatórios (*)";
-    feedback.className = "feedback error"; return;
+  if(aluno.cpf.length !== 11){
+    feedback.textContent = "CPF deve ter 11 números";
+    feedback.className = "feedback error";
+    return;
   }
 
-
-  const novo = new Aluno({
-    nomeCompleto: nome, genero, dataNascimento: dataNasc, cpf, telefone, email,
-    cep, cidade, estado, logradouro, numero, complemento, bairro
-  });
-
-
-  cadastrarAluno(novo)
-    .then(msg => {
-      feedback.textContent = msg;
-      feedback.className = "feedback success";
-      e.target.reset();
-    })
-    .catch(err => {
-      feedback.textContent = err;
-      feedback.className = "feedback error";
-    });
+  try {
+    const listaAtual = listarTodosAlunos();
+    listaAtual.push(aluno);
+    localStorage.setItem('alunos', JSON.stringify(listaAtual));
+    
+    feedback.textContent = "Aluno cadastrado com sucesso!";
+    feedback.className = "feedback success";
+    form.reset();
+    renderLista();
+  } catch(err){
+    feedback.textContent = "Erro: " + err;
+    feedback.className = "feedback error";
+  }
 });
