@@ -1,0 +1,6 @@
+{
+  "name": "ava-educa",
+  "version": "1.0.0",
+  "description": "AVA-EDUCA+ - AVA estático para gestão de cursos e alunos",
+  "type": "module"
+}

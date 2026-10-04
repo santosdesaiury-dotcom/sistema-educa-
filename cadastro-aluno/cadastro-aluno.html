@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Aluno - AVA-EDUCA+</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="./cadastro-aluno.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+<body>
+
+  <header class="toolbar">
+    <div class="logo">AVA-EDUCA+</div>
+    <div class="user" id="userName"></div>
+  </header>
+
+  <div class="layout">
+  
+    <nav class="sidebar">
+      <a href="../dashboard/dashboard.html">Dashboard</a>
+      <a class="disabled">Cursos</a>
+      <a href="./cadastro-aluno.html" class="active">Cadastro de Alunos</a>
+      <button id="btnSair">Sair</button>
+    </nav>
+
+    <main class="content">
+      <h2>Cadastro de Aluno</h2>
+      <form id="formAluno">
+        <div class="form-group">
+          <label>Nome Completo * (4 a 80)</label>
+          <input id="nome" maxlength="80" required placeholder="Ex: João da Silva">
+        </div>
+        <div class="form-group">
+          <label>Gênero *</label>
+          <select id="genero" required>
+            <option value="">Selecione</option>
+            <option>Masculino</option>
+            <option>Feminino</option>
+            <option>Outro</option>
+            <option>Prefiro não informar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Data Nascimento * DD/MM/YYYY</label>
+          <input id="dataNasc" required placeholder="DD/MM/YYYY">
+        </div>
+        <div class="form-group">
+          <label>CPF * (somente números)</label>
+          <input id="cpf" inputmode="numeric" required placeholder="Somente números">
+        </div>
+        <div class="form-group">
+          <label>Telefone * (somente números)</label>
+          <input id="telefone" inputmode="numeric" required>
+        </div>
+        <div class="form-group">
+          <label>E-mail *</label>
+          <input id="email" type="email" required>
+        </div>
+
+        <h3>Endereço</h3>
+
+        <div class="form-group">
+          <label>CEP * (somente números)</label>
+          <input id="cep" inputmode="numeric" required placeholder="Ex: 89010000">
+        </div>
+        <div class="form-group">
+          <label>Cidade *</label>
+          <input id="cidade" required>
+        </div>
+        <div class="form-group">
+          <label>Estado *</label>
+          <input id="estado" required>
+        </div>
+        <div class="form-group">
+          <label>Logradouro *</label>
+          <input id="logradouro" required>
+        </div>
+        <div class="form-group">
+          <label>Número *</label>
+          <input id="numero" inputmode="numeric" required>
+        </div>
+        <div class="form-group">
+          <label>Complemento</label>
+          <input id="complemento">
+        </div>
+        <div class="form-group">
+          <label>Bairro *</label>
+          <input id="bairro" required>
+        </div>
+
+        <button class="btn" type="submit">Salvar Aluno</button>
+        <div id="feedback" class="feedback"></div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="./cadastro-aluno.js"></script>
+</body>
+</html>

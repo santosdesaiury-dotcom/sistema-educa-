@@ -1,0 +1,38 @@
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #eef2ff;
+}
+
+.login-card {
+    background: #fff;
+    padding: 32px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h1 {
+    color: #2c3e94;
+    margin-bottom: 4px
+}
+
+.login-card p {
+    margin-bottom: 16px;
+    color: #555
+}
+
+#forgot {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: .85rem;
+    color: #2c3e94;
+    text-decoration: none
+}
+
+#forgot:hover {
+    text-decoration: underline
+}
